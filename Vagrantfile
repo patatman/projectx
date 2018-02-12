@@ -1,6 +1,5 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-# Robert
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
@@ -13,7 +12,9 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/xenial64"
+  ENV['LC_ALL']="en_US.UTF-8"
+  config.vm.host_name = "projectx.local"
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -41,13 +42,27 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   config.vm.synced_folder ".salt/srv/", "/srv/salt/"
 
-    ## Use all the defaults:
+  ## Use all the defaults:
   config.vm.provision :salt do |salt|
+    
+  ## Master config
+    #salt.masterless = true
+    salt.master_key = ".salt/keys/master.pem"
+    salt.master_pub = ".salt/keys/master.pub"
+    salt.seed_master = { 
+                        "projectx.local" => ".salt/keys/minion.pub"
+                       }
 
-    salt.masterless = true
-#    salt.install_master = true
-#    salt.master_config = ".salt/master"
+    salt.install_type = "stable"
+    salt.verbose = true
+    salt.colorize = true
+    salt.install_master = true
+    salt.master_config = ".salt/master"
+
+  ## Minion Config
     salt.minion_config = ".salt/minion"
+    salt.minion_key = ".salt/keys/minion.pem"
+    salt.minion_pub = ".salt/keys/minion.pub"
     salt.run_highstate = true
   end
   # Provider-specific configuration so you can fine-tune various
@@ -65,18 +80,4 @@ Vagrant.configure("2") do |config|
   # View the documentation for the provider you are using for more
   # information on available options.
 
-  # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
-  # such as FTP and Heroku are also available. See the documentation at
-  # https://docs.vagrantup.com/v2/push/atlas.html for more information.
-  # config.push.define "atlas" do |push|
-  #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
-  # end
-
-  # Enable provisioning with a shell script. Additional provisioners such as
-  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-  # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   apt-get update
-  #   apt-get install -y apache2
-  # SHELL
 end
