@@ -1,1 +1,0 @@
-{"virtualbox":{"/srv/salt/":{"guestpath":"/srv/salt","hostpath":"/Users/pjeursen/vagrant/projectx/.salt/srv","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/pjeursen/vagrant/projectx","disabled":false,"__vagrantfile":true}}}
