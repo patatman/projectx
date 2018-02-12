@@ -13,7 +13,7 @@
 
 # Set the location of the salt master server. If the master server cannot be
 # resolved, then the minion will fail to start.
-master: salt.uberserver.nl
+master: 127.0.0.1
 
 # Set http proxy information for the minion when doing requests
 #proxy_host:
@@ -860,4 +860,4 @@ master: salt.uberserver.nl
 ######    Miscellaneous  settings     ######
 ############################################
 # Default match type for filtering events tags: startswith, endswith, find, regex, fnmatch
-#event_match_type: startswith 
+#event_match_type: startswith

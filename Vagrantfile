@@ -44,11 +44,11 @@ Vagrant.configure("2") do |config|
     ## Use all the defaults:
   config.vm.provision :salt do |salt|
 
-    salt.masterless = False
-    salt.install_master = True
-    salt.master_config = ".salt/master" 
+    salt.masterless = false
+    salt.install_master = true
+    salt.master_config = ".salt/master"
     salt.minion_config = ".salt/minion"
-    salt.run_highstate = true
+#    salt.run_highstate = true
   end
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
