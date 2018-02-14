@@ -1,6 +1,6 @@
 install_docker:
   pkg.installed:
-    - pkgs: 
+    - pkgs:
         - docker.io
         - python-pip
 
@@ -13,9 +13,3 @@ start_docker_service:
 install_docker_python:
   pip.installed:
     - name: docker-py
-
-#portainer:
-#  docker_container.running:
-#    - image: portainer/portainer
-#  require: 
-#    pip.installed: docker-py
