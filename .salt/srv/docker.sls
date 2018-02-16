@@ -1,8 +1,10 @@
 install_docker:
   pkg.installed:
-    - pkgs: 
-        - docker.io
-        - python-pip
+    - name: docker.io
+
+install_pip:
+  pkg.installed: 
+    - name: python-pip
 
 start_docker_service:
   service.running:
@@ -13,6 +15,9 @@ start_docker_service:
 install_docker_python:
   pip.installed:
     - name: docker-py
+    - reload_modules: True
+    - require:
+        - pkg: python-pip
 
 #portainer:
 #  docker_container.running:
