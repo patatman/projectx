@@ -2,12 +2,23 @@
 ##########################      Infrastructure      #############################
 #################################################################################
 
-caddy:
+#caddy:
+#  docker_container.running:
+#    - image: lucaslorentz/caddy-docker-proxy:latest
+#    - port_bindings:
+#      - "80:80/tcp"
+#      - "443:443/tcp"
+#    - restart_policy: always
+
+traefik:
   docker_container.running:
-    - image: lucaslorentz/caddy-docker-proxy:latest
+    - image: traefik
+    - command: "--api --docker"
+    - binds:
+      - /var/run/docker.sock:/var/run/docker.sock
     - port_bindings:
-      - "80:80/tcp"
-      - "443:443/tcp"
+      - "81:80/tcp"
+      - "8084:8080/tcp"
     - restart_policy: always
 
 redis:
@@ -26,10 +37,12 @@ portainer:
       - /var/run/docker.sock:/var/run/docker.sock:rw
     - port_bindings:
       - "9000:9000/tcp"
+    - labels:
+      - "traefik.frontend.rule=Host:portainer.docker.localhost"
     - restart_policy: always
 
 #################################################################################
-########################## Front-End webinterface   #############################
+########################## Front-End webinterfaces   ############################
 #################################################################################
 
 organizr:
@@ -255,6 +268,46 @@ lidarr:
       - /data/media/music:/music:rw
     - port_bindings:
       - "8686:8686/tcp"
+    - environment:
+      - PUID: 7000
+      - PGID: 7000
+    - restart_policy: always
+
+    #################################################################################
+    ########################    Streaming services    ###############################
+    #################################################################################
+
+plex:
+  docker_container.running:
+    - image: linuxserver/plex:latest
+    - binds:
+      - /data/docker/plex/config:/config:rw
+      - /data/media/tv:/data/tvshows:rw
+      - /data/media/movies:/data/movies:rw
+      - /data/transcode/transcode:/transcode:rw
+    - port_bindings:
+      - "32400:32400/tcp"
+      - "32400:32400/udp"
+      - "32469:32469/tcp"
+      - "32469:32469/udp"
+      - "5353:5353/udp"
+      - "1900:1900/udp"
+    - environment:
+      - PUID: 7000
+      - PGID: 7000
+    - restart_policy: always
+
+emby:
+  docker_container.running:
+    - image: emby/embyserver
+    - binds:
+      - /data/docker/plex/config:/config:rw
+      - /data/media/tv:/data/tvshows:rw
+      - /data/media/movies:/data/movies:rw
+      - /data/transcode/transcode:/transcode:rw
+    - port_bindings:
+      - "8096:8096/tcp"
+      - "8920:8920/tcp"
     - environment:
       - PUID: 7000
       - PGID: 7000
